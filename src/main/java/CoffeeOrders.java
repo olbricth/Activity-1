@@ -1,3 +1,6 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Scanner;
 
 public class CoffeeOrders {
@@ -43,19 +46,36 @@ public class CoffeeOrders {
                 System.out.println("Invalid choice. Please try again.");
             }
         }
-
         // get the grandtotal
+        double receipt = 0;
         double vat = subtotal * vatRate;
         double grandTotal = subtotal + vat;
 
         // display the receipt and the results
-        System.out.println("\n--- Coffee Order Receipt ---");
+        StringWriter gab = new StringWriter();
+        gab.append("\n--- Coffee Order Receipt ---\n");
         for (int i = 0; i < 4; i++) {
+            if(orderQuantities[i] > 0) {
+                gab.append(String.format("%s x %d = %.2f PHP\n", coffeeNames[i],
+                        orderQuantities[i], prices[i] * orderQuantities[i]));
+            }
+
         }
-        System.out.printf("Subtotal: %.2f PHP\n", subtotal);
-        System.out.printf("VAT (12%%): %.2f PHP\n", vat);
-        System.out.printf("Grand Total: %.2f PHP\n", grandTotal);
+        gab.append(String.format("Subtotal: %.2f PHP\n", subtotal));
+        gab.append(String.format("VAT (12%%): %.2f PHP\n", vat));
+        gab.append(String.format("Grand Total: %.2f PHP\n", grandTotal));
+
+        try (FileWriter writer = new FileWriter("coffeeReceipt.txt")) {
+            writer.write(gaby.toString());
+            System.out.println("Receipt saved to coffeeReceipt.txt");
+        } catch (IOException e) {
+            System.out.println("An error occurred while saving the receipt.");
+            e.printStackTrace();
+
+        }
+        System.out.print(gab.toString());
     }
+
 }
 
 
